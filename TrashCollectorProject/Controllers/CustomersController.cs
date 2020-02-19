@@ -47,7 +47,13 @@ namespace TrashCollectorProject.Controllers
         // GET: Customer/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ViewModel viewModel = new ViewModel();
+            var user = _repo.Customer.GetCustomer(userId);
+            viewModel.Customer = user;
+            viewModel.Address = _repo.Address.GetAddress(user.AddressId);
+            viewModel.IdentityUser = _repo.Customer.GetIdentityUser(user.IdentityId);
+            return View(viewModel);
         }
 
         // GET: Customer/Create

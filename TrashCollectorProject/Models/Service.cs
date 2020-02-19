@@ -13,6 +13,7 @@ namespace TrashCollectorProject.Models
         public bool isActive { get; set; }
         public DateTime SuspensionStart { get; set; }
         public DateTime SuspensionEnd { get; set; }
+        public DateTime OneTimePickup { get; set; }
         public DayOfWeek PickupDay { get; set; }
         public double Balance { get; set; }
     }
