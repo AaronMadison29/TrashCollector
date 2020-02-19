@@ -12,5 +12,8 @@ namespace TrashCollectorProject.Data
         public ServiceRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
         {
         }
+
+        public Service GetService(int serviceId) => FindByCondition(c => c.Id.Equals(serviceId)).SingleOrDefault();
+        public void CreateService(Service service) => Create(service);
     }
 }

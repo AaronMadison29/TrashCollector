@@ -24,7 +24,7 @@ namespace TrashCollectorProject.Models
         public IdentityUser IdentityUser { get; set; }
 
         [ForeignKey("Service")]
-        public int ServiceId { get; set; }
+        public int? ServiceId { get; set; }
         public Service Service { get; set; }
 
     }

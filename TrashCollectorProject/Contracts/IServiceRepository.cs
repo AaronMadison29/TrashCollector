@@ -8,6 +8,7 @@ namespace TrashCollectorProject.Contracts
 {
     public interface IServiceRepository : IRepositoryBase<Service>
     {
-
+        Service GetService(int serviceId);
+        void CreateService(Service service);
     }
 }

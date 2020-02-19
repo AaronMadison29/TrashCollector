@@ -35,5 +35,9 @@ namespace TrashCollectorProject
         {
             ApplicationDbContext.Set<T>().Remove(entity);
         }
+        public IQueryable<T> Include(Expression<Func<T, bool>> expression)
+        {
+            return ApplicationDbContext.Set<T>().Include(expression);
+        }
     }
 }

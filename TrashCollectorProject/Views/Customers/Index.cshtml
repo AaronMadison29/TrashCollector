@@ -1,0 +1,85 @@
+﻿@model TrashCollectorProject.Models.ViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Account</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer.IdentityUser.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address.StreetAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address.City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address.State)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address.Zip)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer.Service.Balance)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer.Service.PickupDay)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer.Service.isActive)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer.Service.SuspensionStart)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer.Service.SuspensionEnd)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                @Html.DisplayFor(model => model.IdentityUser.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.Customer.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.Address.StreetAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.Address.City)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.Address.State)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.Address.Zip)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.Customer.Service.isActive)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.Customer.Service.SuspensionStart)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.Customer.Service.SuspensionEnd)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@Model.Customer.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@Model.Customer.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@Model.Customer.Id">Delete</a>
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -12,5 +12,8 @@ namespace TrashCollectorProject.Data
         public EmployeeRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
         {
         }
+
+        public Employee GetEmployee(int employeeId) => FindByCondition(c => c.Id.Equals(employeeId)).SingleOrDefault();
+        public void CreateEmployee(Employee employee) => Create(employee);
     }
 }

@@ -8,5 +8,7 @@ namespace TrashCollectorProject.Contracts
 {
     public interface IEmployeeRepository : IRepositoryBase<Employee>
     {
+        Employee GetEmployee(int employeeId);
+        void CreateEmployee(Employee employee);
     }
 }
