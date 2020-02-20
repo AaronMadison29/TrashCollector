@@ -24,7 +24,7 @@ namespace TrashCollectorProject.Controllers
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (_repo.Customer.FindByCondition(x => x.IdentityId == userId).Any())
             {
-                ViewModel viewModel = new ViewModel();
+                CustomerViewModel viewModel = new CustomerViewModel();
                 var user = _repo.Customer.GetCustomer(userId);
                 viewModel.Customer = user;
                 viewModel.Address = _repo.Address.GetAddress(user.AddressId);
@@ -66,7 +66,7 @@ namespace TrashCollectorProject.Controllers
         public ActionResult Details()
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            ViewModel viewModel = new ViewModel();
+            CustomerViewModel viewModel = new CustomerViewModel();
             var user = _repo.Customer.GetCustomer(userId);
             viewModel.Customer = user;
             viewModel.Address = _repo.Address.GetAddress(user.AddressId);
@@ -232,6 +232,42 @@ namespace TrashCollectorProject.Controllers
             var service = _repo.Service.GetService(user.ServiceId ?? default);
 
             return View(service);
+        }
+
+        public ActionResult SuspendService()
+        {
+
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = _repo.Customer.GetCustomer(userId);
+
+            var service = _repo.Service.GetService(user.ServiceId ?? default);
+
+            return View(service);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SuspendService(Service service)
+        {
+            try
+            {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var user = _repo.Customer.GetCustomer(userId);
+
+                var serviceToChange = _repo.Service.GetService(user.ServiceId ?? default);
+                serviceToChange.SuspensionStart = service.SuspensionStart;
+                serviceToChange.SuspensionEnd = service.SuspensionEnd;
+                serviceToChange.isActive = false;
+
+                _repo.Service.Update(serviceToChange);
+                _repo.Save();
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
         }
     }
 }

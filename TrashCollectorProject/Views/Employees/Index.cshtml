@@ -1,0 +1,51 @@
+﻿@model TrashCollectorProject.Models.EmployeeViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Customer Name </th>
+            <th>Username</th>
+            <th>Street Address</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Zip</th>
+            <th>Options</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var customer in Model.Customers) {
+        <tr>
+            <td>
+                @Html.Display(customer.Customer.Name);
+            </td>
+            <td>
+                @Html.Display(customer.IdentityUser.UserName);
+            </td>
+            <td>
+                @Html.Display(customer.Address.StreetAddress);
+            </td>
+            <td>
+                @Html.Display(customer.Address.City);
+            </td>
+            <td>
+                @Html.Display(customer.Address.State);
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -13,7 +13,7 @@ namespace TrashCollectorProject.Data
         {
         }
 
-        public Employee GetEmployee(int employeeId) => FindByCondition(c => c.Id.Equals(employeeId)).SingleOrDefault();
+        public Employee GetEmployee(string employeeId) => FindByCondition(c => c.IdentityId.Equals(employeeId)).SingleOrDefault();
         public void CreateEmployee(Employee employee) => Create(employee);
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TrashCollectorProject.Models
 {
-    public class ViewModel
+    public class CustomerViewModel
     {
         public Address Address {get;set;}
         public Customer Customer { get; set; }
