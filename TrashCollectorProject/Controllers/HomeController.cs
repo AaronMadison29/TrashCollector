@@ -27,21 +27,18 @@ namespace TrashCollectorProject.Controllers
         {
             try
             {
-                if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (userId != null)
                 {
-                    var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    if (userId != null)
+                    var user = _userManager.FindByIdAsync(userId).Result;
+                    var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+                    if (role == "Customer")
                     {
-                        var user = _userManager.FindByIdAsync(userId).Result;
-                        var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
-                        if (role == "Customer")
-                        {
-                            return RedirectToAction("Index", "Customers");
-                        }
-                        else if (role == "Employee")
-                        {
-                            return RedirectToAction("Index", "Employees");
-                        }
+                        return RedirectToAction("Index", "Customers");
+                    }
+                    else if (role == "Employee")
+                    {
+                        return RedirectToAction("Index", "Employees");
                     }
                 }
             }

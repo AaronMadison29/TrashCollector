@@ -20,15 +20,29 @@ namespace TrashCollectorProject.Controllers
 
         public ActionResult Index()
         {
-            EmployeeViewModel employeeViewModel = new EmployeeViewModel();
-
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            employeeViewModel.Employee = _repo.Employee.GetEmployee(userId);
+            if (_repo.Employee.FindByCondition(x => x.IdentityId == userId).Any())
+            {
+                EmployeeViewModel employeeViewModel = new EmployeeViewModel();
 
-            employeeViewModel.Customers = _repo.Customer.FindAll().ToList();
+                var employee = _repo.Employee.GetEmployee(userId);
 
-            return View(employeeViewModel);
+                employeeViewModel.Employee = employee;
+
+                var customers = _repo.Customer.FindByCondition(x => x.Address.Zip == employee.Zip).ToList();
+
+                foreach(var customer in customers)
+                {
+                    customer.Address = _repo.Address.GetAddress(customer.AddressId);
+                }
+                employeeViewModel.Customers = customers;
+                return View(employeeViewModel);
+            }
+            else
+            {
+                return RedirectToAction("Create");
+            }
         }
 
         public ActionResult Create()
