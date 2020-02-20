@@ -15,12 +15,14 @@
 
         <div><a asp-action="EditAddress">Change Address</a></div>
 
-        <div><a asp-action="Details" asp-route-id="model.Customer.Id">Account Details</a></div>
+        <div><a asp-action="Details">Account Details</a></div>
 
         @if (Model.Service != null)
         {
-            <div><a asp-action="EditPickupDay" asp-route-id="model.Customer.Id">Change Weekly Pickup Day</a></div>
+            <div><a asp-action="EditPickupDay">Change Weekly Pickup Day</a></div>
         }
+
+        <div><a asp-action="SetupOTP">Setup a One Time Pickup</a></div>
 
     </div>
 

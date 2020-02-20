@@ -184,6 +184,45 @@ namespace TrashCollectorProject.Controllers
             }
         }
 
+        public ActionResult SetupOTP()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SetupOTP(Service service)
+        {
+            try
+            {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var user = _repo.Customer.GetCustomer(userId);
+
+                if(_repo.Service.GetService(user.ServiceId ?? default) is null)
+                {
+                    _repo.Service.CreateService(service);
+
+                    user.ServiceId = service.Id;
+
+                }
+                else
+                {
+                    var serviceToChange = _repo.Service.GetService(user.ServiceId ?? default);
+                    serviceToChange.OneTimePickup = service.OneTimePickup;
+
+                    _repo.Service.Update(serviceToChange);
+                }
+
+                _repo.Save();
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
         // GET: Customer/Delete/5
         public ActionResult Delete(int id)
         {

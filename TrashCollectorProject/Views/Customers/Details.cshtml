@@ -82,5 +82,14 @@
                 @Html.DisplayFor(model => model.Service.SuspensionEnd)
             </dd>
         }
+        @if (Model.Service != null && Model.Service.OneTimePickup != null)
+        {
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Service.OneTimePickup)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Service.OneTimePickup)
+            </dd>
+        }
     </dl>
 </div>
