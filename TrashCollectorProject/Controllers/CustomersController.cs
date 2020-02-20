@@ -223,27 +223,15 @@ namespace TrashCollectorProject.Controllers
             }
         }
 
-        // GET: Customer/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Billing()
         {
-            return View();
-        }
 
-        // POST: Customer/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = _repo.Customer.GetCustomer(userId);
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            var service = _repo.Service.GetService(user.ServiceId ?? default);
+
+            return View(service);
         }
     }
 }

@@ -23,6 +23,11 @@
         }
 
         <div><a asp-action="SetupOTP">Setup a One Time Pickup</a></div>
+        
+        @if (Model.Service != null)
+        {
+            <div><a asp-action="Billing">Billing</a></div>
+        }
 
     </div>
 
