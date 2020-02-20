@@ -29,6 +29,7 @@ namespace TrashCollectorProject.Controllers
                 viewModel.Customer = user;
                 viewModel.Address = _repo.Address.GetAddress(user.AddressId);
                 viewModel.IdentityUser = _repo.Customer.GetIdentityUser(user.IdentityId);
+                viewModel.Service = _repo.Service.GetService(user.ServiceId ?? default);
                 return View(viewModel);
             }
             else
@@ -37,15 +38,32 @@ namespace TrashCollectorProject.Controllers
             }
         }
 
-        public ActionResult SetDeliveryDay()
+        public ActionResult BeginService()
         {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult BeginService(Service service)
+        {
+            service.isActive = true;
+            _repo.Service.CreateService(service);
+            _repo.Save();
+
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = _repo.Customer.FindByCondition((x => x.IdentityUser.Id == userId));
-            return View(user);
+            var user = _repo.Customer.GetCustomer(userId);
+
+            user.ServiceId = service.Id;
+            _repo.Customer.Update(user);
+
+            _repo.Save();
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Customer/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details()
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             ViewModel viewModel = new ViewModel();
@@ -53,6 +71,7 @@ namespace TrashCollectorProject.Controllers
             viewModel.Customer = user;
             viewModel.Address = _repo.Address.GetAddress(user.AddressId);
             viewModel.IdentityUser = _repo.Customer.GetIdentityUser(user.IdentityId);
+            viewModel.Service = _repo.Service.GetService(user.ServiceId ?? default);
             return View(viewModel);
         }
 
@@ -93,20 +112,69 @@ namespace TrashCollectorProject.Controllers
             }
         }
 
-        // GET: Customer/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult EditPickupDay()
         {
-            return View();
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = _repo.Customer.GetCustomer(userId);
+
+            var service = _repo.Service.GetService(user.ServiceId ?? default);
+
+            return View(service);
         }
 
         // POST: Customer/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult EditPickupDay(Service service)
         {
             try
             {
-                // TODO: Add update logic here
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var user = _repo.Customer.GetCustomer(userId);
+
+                var serviceToChange = _repo.Service.GetService(user.ServiceId ?? default);
+                serviceToChange.PickupDay = service.PickupDay;
+
+                _repo.Service.Update(serviceToChange);
+                _repo.Save();
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: Customer/Edit/5
+        public ActionResult EditAddress()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = _repo.Customer.GetCustomer(userId);
+
+            Address address = _repo.Address.GetAddress(user.AddressId);
+
+            return View(address);
+        }
+
+        // POST: Customer/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditAddress(Address address)
+        {
+            try
+            {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var user = _repo.Customer.GetCustomer(userId);
+
+                var addressToChange = _repo.Address.FindByCondition(x => x.Id == user.AddressId).First();
+                addressToChange.StreetAddress = address.StreetAddress;
+                addressToChange.City = address.City;
+                addressToChange.State = address.State;
+                addressToChange.Zip = address.Zip;
+
+                _repo.Address.Update(addressToChange);
+                _repo.Save();
 
                 return RedirectToAction(nameof(Index));
             }

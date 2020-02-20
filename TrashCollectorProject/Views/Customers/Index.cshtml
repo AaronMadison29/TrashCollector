@@ -5,6 +5,28 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Account</h1>
+    <div>
+        <h4>Customer Dashboard</h4>
 
-<a asp-action="Details" asp-route-id="model.Customer.Id">Details</a>
+        @if (Model.Service == null)
+        {
+            <div><a asp-action="BeginService">Begin Service</a></div>
+        }
+
+        <div><a asp-action="EditAddress">Change Address</a></div>
+
+        <div><a asp-action="Details" asp-route-id="model.Customer.Id">Account Details</a></div>
+
+        @if (Model.Service != null)
+        {
+            <div><a asp-action="EditPickupDay" asp-route-id="model.Customer.Id">Change Weekly Pickup Day</a></div>
+        }
+
+    </div>
+
+
+
+
+
+
+

@@ -1,0 +1,45 @@
+﻿@model TrashCollectorProject.Models.ViewModel
+
+@{
+    ViewData["Title"] = "DeliveryDay";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>DeliveryDay</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="DeliveryDay">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <select asp-for="Service.PickupDay" name="submit">
+
+                    <option value=@DayOfWeek.Sunday>Sunday</option>
+
+                    <option value=@DayOfWeek.Monday>Monday</option>
+
+                    <option value=@DayOfWeek.Tuesday>Tuesday</option>
+
+                    <option value=@DayOfWeek.Wednesday>Wednesday</option>
+
+                    <option value=@DayOfWeek.Thursday>Thursday</option>
+
+                    <option value=@DayOfWeek.Friday>Friday</option>
+
+                    <option value=@DayOfWeek.Saturday>Saturday</option>
+
+                </select>
+                <input asp-for="Service.PickupDay" type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

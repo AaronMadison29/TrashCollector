@@ -32,7 +32,7 @@ namespace TrashCollectorProject
 options.UseSqlServer(
 Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
-            options.SignIn.RequireConfirmedAccount = true)
+            options.SignIn.RequireConfirmedAccount = false)
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultUI()
             .AddDefaultTokenProviders();
