@@ -32,11 +32,16 @@ namespace TrashCollectorProject.Controllers
 
                 var customers = _repo.Customer.FindByCondition(x => x.Address.Zip == employee.Zip).ToList();
 
-                foreach(var customer in customers)
+                List<Customer> dayCustomers = new List<Customer>();
+                foreach (var customer in customers)
                 {
-                    customer.Address = _repo.Address.GetAddress(customer.AddressId);
+                    if(_repo.Service.GetService(customer.ServiceId ?? default).PickupDay == DateTime.Now.DayOfWeek)
+                    {
+                        customer.Address = _repo.Address.GetAddress(customer.AddressId);
+                        dayCustomers.Add(customer);
+                    }
                 }
-                employeeViewModel.Customers = customers;
+                employeeViewModel.Customers = dayCustomers;
                 return View(employeeViewModel);
             }
             else
