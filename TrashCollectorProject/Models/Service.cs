@@ -28,5 +28,7 @@ namespace TrashCollectorProject.Models
         [Display(Name = "Pickup Day")]
         public DayOfWeek PickupDay { get; set; }
         public double Balance { get; set; }
+
+        
     }
 }
