@@ -16,17 +16,20 @@ namespace TrashCollectorProject.Controllers
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<HomeController> _logger;
+        private readonly IRepositoryWrapper _repo;
 
-        public HomeController(UserManager<IdentityUser> userManager, ILogger<HomeController> logger)
+        public HomeController(UserManager<IdentityUser> userManager, ILogger<HomeController> logger, IRepositoryWrapper repo)
         {
             _userManager = userManager;
             _logger = logger;
+            _repo = repo;
         }
 
         public IActionResult Index()
         {
             try
             {
+                CustomerUpdate();
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 if (userId != null)
                 {
@@ -58,6 +61,33 @@ namespace TrashCollectorProject.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+        public void CustomerUpdate()
+        {
+            var customers = _repo.Customer.GetCustomersIncludeAll();
+
+            foreach (var customer in customers)
+            {
+                if(DateTime.Now.Date > customer.Service.SuspensionEnd)
+                {
+                    customer.Service.SuspensionStart = null;
+                    customer.Service.SuspensionEnd = null;
+                }
+                if (customer.Service.SuspensionStart < DateTime.Now.Date && DateTime.Now.Date < customer.Service.SuspensionEnd)
+                {
+                    customer.Service.isActive = false;
+                }
+                else
+                {
+                    customer.Service.isActive = true;
+                }
+                if (DayOfWeek.Sunday == DateTime.Now.DayOfWeek)
+                {
+                    customer.Service.PickedUp = false;
+                }
+                _repo.Customer.Update(customer);
+                _repo.Save();
+            }
         }
     }
 }

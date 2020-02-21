@@ -143,7 +143,9 @@ namespace TrashCollectorProject.Controllers
 
         public List<Customer> GetTodaysCustomers(List<Customer> customers, int employeeZip)
         {
-            return customers.Where(c => c.Address.Zip == employeeZip && c.Service.isActive is true && c.Service.PickupDay == DateTime.Now.DayOfWeek).ToList();
+            var x = customers.Where(c => c.Address.Zip == employeeZip && c.Service.isActive is true).ToList();
+            var y = x.Where(x => x.Service.OneTimePickup.Value.Date == DateTime.Now.Date || x.Service.PickupDay == DateTime.Now.DayOfWeek).ToList();
+            return y;
         }
     }
 }
