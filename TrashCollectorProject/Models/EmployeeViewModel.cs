@@ -10,5 +10,6 @@ namespace TrashCollectorProject.Models
     {
         public Employee Employee { get; set; }
         public List<Customer> Customers { get; set; }
+        public DayOfWeek? QueryDay { get; set; }
     }
 }

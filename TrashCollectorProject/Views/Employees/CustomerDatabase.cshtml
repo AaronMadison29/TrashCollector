@@ -1,0 +1,84 @@
+﻿@model TrashCollectorProject.Models.EmployeeViewModel
+
+@{
+    ViewData["Title"] = "CustomerDatabase";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>CustomerDatabase</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CustomerDatabase">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="QueryDay" class="control-label"></label>
+                <select asp-for="QueryDay" value="QueryDay.DayOfWeek" class="form-control">
+                    <option value=@DayOfWeek.Sunday>Sunday</option>
+                    <option value=@DayOfWeek.Monday>Monday</option>
+                    <option value=@DayOfWeek.Tuesday>Tuesday</option>
+                    <option value=@DayOfWeek.Wednesday>Wednesday</option>
+                    <option value=@DayOfWeek.Thursday>Thursday</option>
+                    <option value=@DayOfWeek.Friday>Friday</option>
+                    <option value=@DayOfWeek.Saturday>Saturday</option>
+                </select>
+                <span asp-validation-for="QueryDay" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Query" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (Model.QueryDay != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Customer Name </th>
+                <th>Street Address</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Zip</th>
+                <th>Account Active</th>
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var customer in Model.Customers)
+            {
+                if (customer.Service.PickupDay == Model.QueryDay)
+                {
+                    <tr>
+                        <td>
+                            @customer.Name
+                        </td>
+                        <td>
+                            @customer.Address.StreetAddress
+                        </td>
+                        <td>
+                            @customer.Address.City
+                        </td>
+                        <td>
+                            @customer.Address.State
+                        </td>
+                        <td>
+                            @customer.Address.Zip
+                        </td>
+                        <td>
+                            @customer.Service.isActive
+                        </td>
+                        <td>
+                            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ })
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+}

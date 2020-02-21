@@ -30,24 +30,47 @@ namespace TrashCollectorProject.Controllers
 
                 employeeViewModel.Employee = employee;
 
-                var customers = _repo.Customer.FindByCondition(x => x.Address.Zip == employee.Zip).ToList();
+                var customers = _repo.Customer.GetCustomersIncludeAll(); //List of customers
 
-                List<Customer> dayCustomers = new List<Customer>();
-                foreach (var customer in customers)
-                {
-                    if(_repo.Service.GetService(customer.ServiceId ?? default).PickupDay == DateTime.Now.DayOfWeek)
-                    {
-                        customer.Address = _repo.Address.GetAddress(customer.AddressId);
-                        dayCustomers.Add(customer);
-                    }
-                }
-                employeeViewModel.Customers = dayCustomers;
+                customers = GetTodaysCustomers(customers, employee.Zip);
+
+                employeeViewModel.Customers = customers;
+
                 return View(employeeViewModel);
             }
             else
             {
                 return RedirectToAction("Create");
             }
+        }
+
+        public ActionResult CustomerDatabase()
+        {
+            EmployeeViewModel employeeViewModel = new EmployeeViewModel();
+
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var employee = _repo.Employee.GetEmployee(userId);
+
+            employeeViewModel.Employee = employee;
+            employeeViewModel.Customers = _repo.Customer.GetCustomersIncludeAll();
+
+            return View(employeeViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CustomerDatabase(EmployeeViewModel viewModelIn)
+        {
+            EmployeeViewModel employeeViewModel = new EmployeeViewModel();
+
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var employee = _repo.Employee.GetEmployee(userId);
+
+            employeeViewModel.Employee = employee;
+            employeeViewModel.Customers = _repo.Customer.GetCustomersIncludeAll();
+            employeeViewModel.QueryDay = viewModelIn.QueryDay;
+
+            return View(employeeViewModel);
         }
 
         public ActionResult Create()
@@ -81,6 +104,11 @@ namespace TrashCollectorProject.Controllers
             {
                 return View();
             }
+        }
+
+        public List<Customer> GetTodaysCustomers(List<Customer> customers, int employeeZip)
+        {
+            return customers.Where(c => c.Address.Zip == employeeZip && c.Service.isActive is true && c.Service.PickupDay == DateTime.Now.DayOfWeek).ToList();
         }
     }
 }

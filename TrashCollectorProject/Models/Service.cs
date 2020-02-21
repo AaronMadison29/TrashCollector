@@ -29,6 +29,7 @@ namespace TrashCollectorProject.Models
         public DayOfWeek PickupDay { get; set; }
         public double Balance { get; set; }
 
-        
+        [Display(Name = "Picked Up")]
+        public bool PickedUp { get; set; }
     }
 }

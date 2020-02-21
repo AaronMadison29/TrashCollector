@@ -5,7 +5,15 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Customers in your area</h1>
+<h1>Good Morning, @Model.Employee.Name</h1>
+<div class="row">
+    <div class="col-sm-6">
+        <h2>Customers in your area</h2>
+    </div>
+    <div class="col-sm-6" style ="text-align:right">
+        <a asp-action="CustomerDatabase">Customer Database</a>
+    </div>
+</div>
 
 <table class="table">
     <thead>
@@ -15,6 +23,7 @@
             <th>City</th>
             <th>State</th>
             <th>Zip</th>
+            <th>Account Active</th>
             <th>Options</th>
         </tr>
     </thead>
@@ -37,9 +46,15 @@
                 @customer.Address.Zip
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @customer.Service.isActive
+            </td>
+            <td>
+                @if (customer.Service.isActive)
+                {
+                    @Html.ActionLink("Confirm Pickup", "Edit", new { /* id=item.PrimaryKey */ })
+                    @: |
+                }
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ })
             </td>
         </tr>
 }

@@ -11,6 +11,8 @@ namespace TrashCollectorProject.Contracts
     {
         Customer GetCustomer(string customerId);
         void CreateCustomer(Customer customer);
+        Customer GetCustomerIncludeAll(string customerId);
+        List<Customer> GetCustomersIncludeAll();
         public IdentityUser GetIdentityUser(string customerId);
     }
 }
