@@ -135,15 +135,15 @@ namespace TrashCollectorProject.Controllers
             }
         }
 
-
+        public ActionResult CustomerDetails(string id)
+        {
+            var customer = _repo.Customer.GetCustomerIncludeAll(id);
+            return View(customer);
+        }
 
         public List<Customer> GetTodaysCustomers(List<Customer> customers, int employeeZip)
         {
             return customers.Where(c => c.Address.Zip == employeeZip && c.Service.isActive is true && c.Service.PickupDay == DateTime.Now.DayOfWeek).ToList();
-        }
-
-        public void ChargeAccount(Customer customer)
-        {
         }
     }
 }
