@@ -67,7 +67,7 @@ namespace TrashCollectorProject.Controllers
             var employee = _repo.Employee.GetEmployee(userId);
 
             employeeViewModel.Employee = employee;
-            employeeViewModel.Customers = _repo.Customer.GetCustomersIncludeAll();
+            employeeViewModel.Customers = _repo.Customer.GetCustomersIncludeAll().Where(c => c.Service.PickupDay == viewModelIn.QueryDay).ToList();
             employeeViewModel.QueryDay = viewModelIn.QueryDay;
 
             return View(employeeViewModel);

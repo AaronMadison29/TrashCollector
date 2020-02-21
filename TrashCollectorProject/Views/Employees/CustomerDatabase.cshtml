@@ -7,15 +7,12 @@
 
 <h1>CustomerDatabase</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="CustomerDatabase">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="QueryDay" class="control-label"></label>
+                <label asp-for="QueryDay" class="control-label">Query Day</label>
                 <select asp-for="QueryDay" value="QueryDay.DayOfWeek" class="form-control">
                     <option value=@DayOfWeek.Sunday>Sunday</option>
                     <option value=@DayOfWeek.Monday>Monday</option>
@@ -34,7 +31,7 @@
     </div>
 </div>
 
-@if (Model.QueryDay != null)
+@if (Model.Customers.Count != 0 && Model.QueryDay != null)
 {
     <table class="table">
         <thead>
@@ -51,34 +48,34 @@
         <tbody>
             @foreach (var customer in Model.Customers)
             {
-                if (customer.Service.PickupDay == Model.QueryDay)
-                {
-                    <tr>
-                        <td>
-                            @customer.Name
-                        </td>
-                        <td>
-                            @customer.Address.StreetAddress
-                        </td>
-                        <td>
-                            @customer.Address.City
-                        </td>
-                        <td>
-                            @customer.Address.State
-                        </td>
-                        <td>
-                            @customer.Address.Zip
-                        </td>
-                        <td>
-                            @customer.Service.isActive
-                        </td>
-                        <td>
-                            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ })
-                        </td>
-                    </tr>
-                }
+                <tr>
+                    <td>
+                        @customer.Name
+                    </td>
+                    <td>
+                        @customer.Address.StreetAddress
+                    </td>
+                    <td>
+                        @customer.Address.City
+                    </td>
+                    <td>
+                        @customer.Address.State
+                    </td>
+                    <td>
+                        @customer.Address.Zip
+                    </td>
+                    <td>
+                        @customer.Service.isActive
+                    </td>
+                    <td>
+                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ })
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
-
+}
+else if (Model.Customers.Count == 0)
+{
+    <strong>There are no customers that day.</strong>
 }
