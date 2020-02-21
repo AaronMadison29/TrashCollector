@@ -61,7 +61,7 @@
                 @Html.DisplayNameFor(model => model.Service.isActive)
             </dt>
             <dd class="col-sm-9">
-                @Html.DisplayFor(model => model.Customer.Service.isActive) @*WONT WORK*@
+                @Model.Service.isActive
             </dd>
         }
         @if (Model.Service != null && Model.Service.SuspensionStart != null)

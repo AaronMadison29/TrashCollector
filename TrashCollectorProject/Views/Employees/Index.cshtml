@@ -10,7 +10,7 @@
     <div class="col-sm-6">
         <h2>Customer pickups in your area today</h2>
     </div>
-    <div class="col-sm-6" style ="text-align:right">
+    <div class="col-sm-6" style="text-align:right">
         <a asp-action="CustomerDatabase">Customer Database</a>
     </div>
 </div>
@@ -28,31 +28,82 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var customer in Model.Customers) {
-        <tr>
-            <td>
-                @customer.Name
-            </td>
-            <td>
-                @customer.Address.StreetAddress
-            </td>
-            <td>
-                @customer.Address.City
-            </td>
-            <td>
-                @customer.Address.State
-            </td>
-            <td>
-                @customer.Address.Zip
-            </td>
-            <td>
-                @customer.Service.isActive
-            </td>
-            <td>
-                @Html.ActionLink("Confirm Pickup", "ConfirmPickup", new { id = customer.IdentityUser.Id }) |
-                @Html.ActionLink("Customer Details", "CustomerDetails", new { id = customer.IdentityUser.Id })
-            </td>
-        </tr>
-}
+        @foreach (var customer in Model.Customers)
+        {
+            <tr>
+                <td>
+                    @customer.Name
+                </td>
+                <td>
+                    @customer.Address.StreetAddress
+                </td>
+                <td>
+                    @customer.Address.City
+                </td>
+                <td>
+                    @customer.Address.State
+                </td>
+                <td>
+                    @customer.Address.Zip
+                </td>
+                <td>
+                    @customer.Service.isActive
+                </td>
+                <td>
+                    @Html.ActionLink("Confirm Pickup", "ConfirmPickup", new { id = customer.IdentityUser.Id }) |
+                    @Html.ActionLink("Customer Details", "CustomerDetails", new { id = customer.IdentityUser.Id })
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+<head>
+    <style>
+        /* Set the size of the div element that contains the map */
+        #map {
+            height: 400px; /* The height is 400 pixels */
+            width: 100%; /* The width is the width of the web page */
+        }
+    </style>
+</head>
+
+<h3>Map View</h3>
+<script>
+var geocoder;
+  var map;
+  function initMap() {
+    var map;
+    var elevator;
+    var myOptions = {
+        zoom: 1,
+        center: new google.maps.LatLng(0, 0),
+        mapTypeId: 'terrain'
+    };
+      map = new google.maps.Map($('#map_canvas')[0], myOptions);
+      var myArray = [];
+
+    @foreach (var d in Model.Customers)
+    {
+        @:myArray.push("@d.Address.StreetAddress + @d.Address.City + @d.Address.State + @d.Address.Zip");
+    }
+      alert(myArray);
+
+    for (var x = 0; x < myArray.length; x++) {
+        $.getJSON('http://maps.googleapis.com/maps/api/geocode/json?address='+myArray[x]+'&sensor=false', null, function (data) {
+            var p = data.results[0].geometry.location
+            var latlng = new google.maps.LatLng(p.lat, p.lng);
+            new google.maps.Marker({
+                position: latlng,
+                map: map
+            });
+
+        });
+    }
+
+});</script>
+<body onload="initMap()">
+    <div id="map" style="width: 700px; height: 480px;"></div>
+</body>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=KEYHEREcallback=initMap">
+</script>
