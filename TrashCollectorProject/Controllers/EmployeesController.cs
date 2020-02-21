@@ -124,6 +124,10 @@ namespace TrashCollectorProject.Controllers
                 var customer = _repo.Customer.GetCustomerIncludeAll(id);
                 customer.Service.PickedUp = confirmed;
                 customer.Service.Balance += 20;
+                if(customer.Service.OneTimePickup.Value.Date == DateTime.Now.Date)
+                {
+                    customer.Service.OneTimePickup = null;
+                }
                 _repo.Customer.Update(customer);
                 _repo.Save();
 
@@ -144,7 +148,7 @@ namespace TrashCollectorProject.Controllers
         public List<Customer> GetTodaysCustomers(List<Customer> customers, int employeeZip)
         {
             var x = customers.Where(c => c.Address.Zip == employeeZip && c.Service.isActive is true).ToList();
-            var y = x.Where(x => x.Service.OneTimePickup.Value.Date == DateTime.Now.Date || x.Service.PickupDay == DateTime.Now.DayOfWeek).ToList();
+            var y = x.Where(x => x.Service.PickupDay == DateTime.Now.DayOfWeek || x.Service.OneTimePickup.GetValueOrDefault().Date == DateTime.Now.Date).ToList();
             return y;
         }
     }
