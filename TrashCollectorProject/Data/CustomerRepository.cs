@@ -17,7 +17,7 @@ namespace TrashCollectorProject.Data
 
         public Customer GetCustomer(string customerId) =>FindByCondition(c => c.IdentityId.Equals(customerId)).SingleOrDefault();
         public void CreateCustomer(Customer customer) => Create(customer);
-        public Customer GetCustomerIncludeAll(string customerId) => FindByCondition(c => c.Id.Equals(customerId)).Include(c => c.Address).Include(x => x.Service).Include(y => y.IdentityUser).SingleOrDefault();
+        public Customer GetCustomerIncludeAll(string indentityId) => FindByCondition(c => c.IdentityId.Equals(indentityId)).Include(c => c.Address).Include(x => x.Service).Include(y => y.IdentityUser).SingleOrDefault();
         public List<Customer> GetCustomersIncludeAll() => FindAll().Include(c => c.Address).Include(x => x.Service).Include(y => y.IdentityUser).ToList();
         public IdentityUser GetIdentityUser(string customerId)
         {

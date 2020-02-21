@@ -106,9 +106,44 @@ namespace TrashCollectorProject.Controllers
             }
         }
 
+        public ActionResult ConfirmPickup(string id)
+        {
+            EmployeeViewModel employeeViewModel = new EmployeeViewModel();
+
+            employeeViewModel.Customer = _repo.Customer.GetCustomerIncludeAll(id);
+
+            return View(employeeViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ConfirmPickup(string id, bool confirmed = true)
+        {
+            try
+            {
+                var customer = _repo.Customer.GetCustomerIncludeAll(id);
+                customer.Service.PickedUp = confirmed;
+                customer.Service.Balance += 20;
+                _repo.Customer.Update(customer);
+                _repo.Save();
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+
+
         public List<Customer> GetTodaysCustomers(List<Customer> customers, int employeeZip)
         {
             return customers.Where(c => c.Address.Zip == employeeZip && c.Service.isActive is true && c.Service.PickupDay == DateTime.Now.DayOfWeek).ToList();
+        }
+
+        public void ChargeAccount(Customer customer)
+        {
         }
     }
 }

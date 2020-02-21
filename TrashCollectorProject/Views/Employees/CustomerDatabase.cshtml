@@ -11,19 +11,19 @@
     <div class="col-md-4">
         <form asp-action="CustomerDatabase">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="QueryDay" class="control-label">Query Day</label>
-                <select asp-for="QueryDay" value="QueryDay.DayOfWeek" class="form-control">
-                    <option value=@DayOfWeek.Sunday>Sunday</option>
-                    <option value=@DayOfWeek.Monday>Monday</option>
-                    <option value=@DayOfWeek.Tuesday>Tuesday</option>
-                    <option value=@DayOfWeek.Wednesday>Wednesday</option>
-                    <option value=@DayOfWeek.Thursday>Thursday</option>
-                    <option value=@DayOfWeek.Friday>Friday</option>
-                    <option value=@DayOfWeek.Saturday>Saturday</option>
-                </select>
-                <span asp-validation-for="QueryDay" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="QueryDay" class="control-label">Query Day</label>
+                    <select asp-for="QueryDay" value="QueryDay.DayOfWeek" class="form-control">
+                        <option value=@DayOfWeek.Sunday>Sunday</option>
+                        <option value=@DayOfWeek.Monday>Monday</option>
+                        <option value=@DayOfWeek.Tuesday>Tuesday</option>
+                        <option value=@DayOfWeek.Wednesday>Wednesday</option>
+                        <option value=@DayOfWeek.Thursday>Thursday</option>
+                        <option value=@DayOfWeek.Friday>Friday</option>
+                        <option value=@DayOfWeek.Saturday>Saturday</option>
+                    </select>
+                    <span asp-validation-for="QueryDay" class="text-danger"></span>
+                </div>
             <div class="form-group">
                 <input type="submit" value="Query" class="btn btn-primary" />
             </div>
@@ -68,7 +68,10 @@
                         @customer.Service.isActive
                     </td>
                     <td>
-                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ })
+                        @if (customer.Service.isActive)
+                        {
+                            @Html.ActionLink("Customer Details", "CustomerDetails", new { id = customer.IdentityUser.Id})
+                        }
                     </td>
                 </tr>
             }

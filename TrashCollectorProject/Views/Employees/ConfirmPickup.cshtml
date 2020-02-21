@@ -1,0 +1,64 @@
+﻿@model TrashCollectorProject.Models.EmployeeViewModel
+
+@{
+    ViewData["Title"] = "ConfirmPickup";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>ConfirmPickup</h1>
+
+<div>
+    <h2>
+        Would you like to confirm this pickup?
+    </h2>
+</div>
+<table>
+    <thead>
+        <tr>
+            <th>Customer Name </th>
+            <th>Street Address</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Zip</th>
+            <th>Account Active</th>
+            <th>Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                @Model.Customer.Name
+            </td>
+            <td>
+                @Model.Customer.Address.StreetAddress
+            </td>
+            <td>
+                @Model.Customer.Address.City
+            </td>
+            <td>
+                @Model.Customer.Address.State
+            </td>
+            <td>
+                @Model.Customer.Address.Zip
+            </td>
+            <td>
+                @Model.Customer.Service.isActive
+            </td>
+            <td>
+                <form asp-action="ConfirmPickup">
+                    <div class="form-group">
+                        <input asp-for="Customer.IdentityUser.Id" type="submit" value="Confirm" id="id" class="btn btn-primary" />
+                    </div>
+                </form>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

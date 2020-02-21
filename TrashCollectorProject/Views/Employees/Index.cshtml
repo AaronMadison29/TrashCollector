@@ -49,12 +49,8 @@
                 @customer.Service.isActive
             </td>
             <td>
-                @if (customer.Service.isActive)
-                {
-                    @Html.ActionLink("Confirm Pickup", "Edit", new { /* id=item.PrimaryKey */ })
-                    @: |
-                }
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Confirm Pickup", "ConfirmPickup", new { id = customer.IdentityUser.Id }) |
+                @Html.ActionLink("Customer Details", "CustomerDetails", new { id = customer.IdentityUser.Id })
             </td>
         </tr>
 }
