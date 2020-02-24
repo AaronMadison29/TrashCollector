@@ -96,13 +96,14 @@ var geocoder;
       map = new google.maps.Map(document.getElementById('map'), mapOptions);
       codeAddress();
   }
+
+    function codeAddress() {
+      
     var addresses = [];
         @foreach(var customer in Model.Customers)
         {
             @:addresses.push("@customer.Address.StreetAddress + @customer.Address.City + @customer.Address.State + @customer.Address.Zip")
         }
-
-  function codeAddress() {
       for (i = 0; i < @Model.Customers.Count; i++) {
           var address = addresses[i];
           geocoder.geocode({ 'address': address }, function (results, status) {
@@ -122,7 +123,7 @@ var geocoder;
     <div id="map" style="width: 700px; height: 480px;"></div>
 </body>
 <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=KEYHERE">
+        src="https://maps.googleapis.com/maps/api/js?key= + @KeyVariables.Key">
 </script>
 
 
