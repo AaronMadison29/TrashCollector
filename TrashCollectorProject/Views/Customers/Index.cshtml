@@ -6,32 +6,36 @@
 }
 
     <div>
-        <h4>Customer Dashboard</h4>
+        <div style="margin-bottom:10px">
+            <h1>Customer Dashboard</h1>
+        </div>
 
         @if (Model.Service == null)
         {
-            <div><a asp-action="BeginService">Begin Service</a></div>
+            <div class="col-sm-3" style="margin-bottom:10px"><a class="btn btn-primary btn-lg btn-block" asp-action="BeginService">Begin Service</a></div>
         }
 
-        <div><a asp-action="EditAddress">Change Address</a></div>
+        <div class="col-sm-3" style="margin-bottom:10px"><a class="btn btn-primary btn-lg btn-block" asp-action="EditAddress">Change Address</a></div>
 
-        <div><a asp-action="Details">Account Details</a></div>
+        <div class="col-sm-3" style="margin-bottom:10px"><a class="btn btn-primary btn-lg btn-block" asp-action="Details">Account Details</a></div>
 
         @if (Model.Service != null)
         {
-            <div><a asp-action="EditPickupDay">Change Weekly Pickup Day</a></div>
+            <div class="col-sm-3" style="margin-bottom:10px"><a class="btn btn-primary btn-lg btn-block" asp-action="EditPickupDay">Change Weekly Pickup Day</a></div>
         }
-
-        <div><a asp-action="SetupOTP">Setup a One Time Pickup</a></div>
-
-        @if (Model.Service != null)
+        @if (!Model.Service.OneTimePickup.HasValue)
         {
-            <div><a asp-action="Billing">Billing</a></div>
+            <div class="col-sm-3" style="margin-bottom:10px"><a class="btn btn-primary btn-lg btn-block" asp-action="SetupOTP">Setup a One Time Pickup</a></div>
         }
 
         @if (Model.Service != null)
         {
-            <div><a asp-action="SuspendService">Suspend Service</a></div>
+            <div class="col-sm-3" style="margin-bottom:10px"><a class="btn btn-primary btn-lg btn-block" asp-action="Billing">Billing</a></div>
+        }
+
+        @if (Model.Service != null)
+        {
+            <div class="col-sm-3" ><a class="btn btn-primary btn-lg btn-block" asp-action="SuspendService">Suspend Service</a></div>
         }
 
     </div>

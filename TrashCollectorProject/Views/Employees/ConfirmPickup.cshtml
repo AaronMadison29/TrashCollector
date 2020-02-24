@@ -12,51 +12,58 @@
         Would you like to confirm this pickup?
     </h2>
 </div>
-<table>
-    <thead>
-        <tr>
-            <th>Customer Name </th>
-            <th>Street Address</th>
-            <th>City</th>
-            <th>State</th>
-            <th>Zip</th>
-            <th>Account Active</th>
-            <th>Options</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-                @Model.Customer.Name
-            </td>
-            <td>
-                @Model.Customer.Address.StreetAddress
-            </td>
-            <td>
-                @Model.Customer.Address.City
-            </td>
-            <td>
-                @Model.Customer.Address.State
-            </td>
-            <td>
-                @Model.Customer.Address.Zip
-            </td>
-            <td>
-                @Model.Customer.Service.isActive
-            </td>
-            <td>
-                <form asp-action="ConfirmPickup">
-                    <div class="form-group">
-                        <input asp-for="Customer.IdentityUser.Id" type="submit" value="Confirm" id="id" class="btn btn-primary" />
-                    </div>
-                </form>
-            </td>
-        </tr>
-    </tbody>
-</table>
-
 <div>
-    <a asp-action="Index">Back to List</a>
+    <h4>Customer</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Customer.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Customer.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Customer.Address.StreetAddress)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Customer.Address.StreetAddress)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Customer.Address.City)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Customer.Address.City)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Customer.Address.State)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Customer.Address.State)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Customer.Address.Zip)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Customer.Address.Zip)
+        </dd>
+        @if (Model.Customer.Service.OneTimePickup.HasValue)
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Customer.Service.OneTimePickup)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Customer.Service.OneTimePickup)
+            </dd>
+        }
+    </dl>
+</div>
+<form asp-action="ConfirmPickup">
+    <div class="form-group">
+        <input asp-for="Customer.IdentityUser.Id" type="submit" value="Confirm" id="id" class="btn btn-primary" />
+    </div>
+</form>
+<div>
+    <a asp-action="Index">Back to Dashboard</a>
 </div>
 
 @section Scripts {

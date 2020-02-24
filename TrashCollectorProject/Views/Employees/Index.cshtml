@@ -5,10 +5,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Good Morning, @Model.Employee.Name</h1>
+<div style="margin-bottom:10px">
+    <h1>Good Morning, @Model.Employee.Name</h1>
+</div>
+
 <div class="row">
     <div class="col-sm-6">
-        <h2>Customer pickups in your area today</h2>
+        <h3>Customer pickups in your area today</h3>
     </div>
     <div class="col-sm-6" style="text-align:right">
         <a asp-action="CustomerDatabase">Customer Database</a>
@@ -17,7 +20,7 @@
 
 <table class="table">
     <thead>
-        <tr>
+        <tr class="table-primary">
             <th>Customer Name </th>
             <th>Street Address</th>
             <th>City</th>
@@ -31,40 +34,44 @@
     <tbody>
         @foreach (var customer in Model.Customers)
         {
-        <tr>
-            <td>
-                @customer.Name
-            </td>
-            <td>
-                @customer.Address.StreetAddress
-            </td>
-            <td>
-                @customer.Address.City
-            </td>
-            <td>
-                @customer.Address.State
-            </td>
-            <td>
-                @customer.Address.Zip
-            </td>
-            <td>
-                @customer.Service.isActive
-            </td>
-            <td>
-                @if (@customer.Service.PickedUp)
-                {
-                    @: Picked Up
-                }
-                else
-                {
-                    @:Awaiting Pickup
-                }
-            </td>
-            <td>
-                @Html.ActionLink("Confirm Pickup", "ConfirmPickup", new { id = customer.IdentityUser.Id }) |
-                @Html.ActionLink("Customer Details", "CustomerDetails", new { id = customer.IdentityUser.Id })
-            </td>
-        </tr>
+            <tr class="table-light">
+                <td>
+                    @customer.Name
+                </td>
+                <td>
+                    @customer.Address.StreetAddress
+                </td>
+                <td>
+                    @customer.Address.City
+                </td>
+                <td>
+                    @customer.Address.State
+                </td>
+                <td>
+                    @customer.Address.Zip
+                </td>
+                <td>
+                    @customer.Service.isActive
+                </td>
+                <td>
+                    @if (@customer.Service.PickedUp)
+                    {
+                        @: Picked Up
+                    }
+                    else
+                    {
+                        @:Awaiting Pickup
+                    }
+                </td>
+                <td>
+                    @if (!@customer.Service.PickedUp)
+                    {
+                        @Html.ActionLink("Confirm Pickup", "ConfirmPickup", new { id = customer.IdentityUser.Id }) @:|
+                    }
+
+                    @Html.ActionLink("Customer Details", "CustomerDetails", new { id = customer.IdentityUser.Id })
+                </td>
+            </tr>
         }
     </tbody>
 </table>
@@ -77,3 +84,48 @@
         }
     </style>
 </head>
+<h3>Map View</h3>
+<script>
+var geocoder;
+  var map;
+  function initialize() {
+    geocoder = new google.maps.Geocoder();
+    var mapOptions = {
+      zoom: 17,
+    }
+      map = new google.maps.Map(document.getElementById('map'), mapOptions);
+      codeAddress();
+  }
+    var addresses = [];
+        @foreach(var customer in Model.Customers)
+        {
+            @:addresses.push("@customer.Address.StreetAddress + @customer.Address.City + @customer.Address.State + @customer.Address.Zip")
+        }
+
+  function codeAddress() {
+      for (i = 0; i < @Model.Customers.Count; i++) {
+          var address = addresses[i];
+          geocoder.geocode({ 'address': address }, function (results, status) {
+              if (status == 'OK') {
+                  map.setCenter(results[0].geometry.location);
+                  var marker = new google.maps.Marker({
+                      map: map,
+                      position: results[0].geometry.location
+                  });
+              } else {
+                  alert('Geocode was not successful for the following reason: ' + status);
+              }
+          });
+      }
+    }</script>
+<body onload="initialize()">
+    <div id="map" style="width: 700px; height: 480px;"></div>
+</body>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=KEYHERE">
+</script>
+
+
+<div>
+    <a asp-action="Index">Back to Dashboard</a>
+</div>
