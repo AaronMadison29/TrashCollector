@@ -124,7 +124,7 @@ namespace TrashCollectorProject.Controllers
                 var customer = _repo.Customer.GetCustomerIncludeAll(id);
                 customer.Service.PickedUp = confirmed;
                 customer.Service.Balance += 20;
-                if(customer.Service.OneTimePickup.Value.Date == DateTime.Now.Date)
+                if(customer.Service.OneTimePickup.HasValue && customer.Service.OneTimePickup.Value.Date == DateTime.Now.Date)
                 {
                     customer.Service.OneTimePickup = null;
                 }

@@ -50,6 +50,36 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Address.Zip)
         </dd>
+        @if (Model.Service.OneTimePickup.HasValue)
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Service.OneTimePickup)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Service.OneTimePickup)
+            </dd>
+        }
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Service.isActive)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Service.isActive)
+        </dd>
+        @if (!Model.Service.isActive)
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Service.SuspensionStart)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Service.SuspensionStart.Value.Date)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Service.SuspensionEnd)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Service.SuspensionEnd.Value.Date)
+            </dd>
+        }
     </dl>
 </div>
 <h3>Map View</h3>
@@ -60,7 +90,7 @@ var geocoder;
     geocoder = new google.maps.Geocoder();
     var latlng = new google.maps.LatLng(-34.397, 150.644);
     var mapOptions = {
-      zoom: 15,
+      zoom: 17,
       center: latlng
     }
       map = new google.maps.Map(document.getElementById('map'), mapOptions);
@@ -85,5 +115,5 @@ var geocoder;
     <div id="map" style="width: 700px; height: 480px;"></div>
 </body>
 <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=KEYHEREcallback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAhGG7m46K7A6wuUzKm9-tjTaCvW1sNDS4&callback=initMap">
 </script>
