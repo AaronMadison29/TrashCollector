@@ -5,8 +5,13 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Stripe;
 using TrashCollectorProject.Contracts;
 using TrashCollectorProject.Models;
+using Service = TrashCollectorProject.Models.Service;
+using Customer = TrashCollectorProject.Models.Customer;
+using Address = TrashCollectorProject.Models.Address;
+
 
 namespace TrashCollectorProject.Controllers
 {
@@ -257,7 +262,6 @@ namespace TrashCollectorProject.Controllers
                 var serviceToChange = _repo.Service.GetService(user.ServiceId ?? default);
                 serviceToChange.SuspensionStart = service.SuspensionStart;
                 serviceToChange.SuspensionEnd = service.SuspensionEnd;
-                serviceToChange.isActive = false;
 
                 _repo.Service.Update(serviceToChange);
                 _repo.Save();
@@ -269,5 +273,42 @@ namespace TrashCollectorProject.Controllers
                 return View();
             }
         }
+        public ActionResult Charge(string stripeEmail, string stripeToken, int serviceId)
+        {
+            try
+            {
+                var customers = new CustomerService();
+                var charges = new ChargeService();
+
+                var service = _repo.Service.FindByCondition(x => x.Id == serviceId).FirstOrDefault();
+
+                var customer = customers.Create(new CustomerCreateOptions
+                {
+                    Email = stripeEmail,
+                    Source = stripeToken
+                });
+
+                var charge = charges.Create(new ChargeCreateOptions
+                {
+                    Amount = (long)service.Balance * 100,//charge in cents
+                    Description = "Waste Pickup",
+                    Currency = "usd",
+                    Customer = customer.Id
+                });
+
+                
+
+                service.Balance = 0;
+                _repo.Service.Update(service);
+                _repo.Save();
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View("Billing");
+            }
+        }
+
     }
 }

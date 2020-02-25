@@ -73,7 +73,7 @@ namespace TrashCollectorProject.Controllers
                     customer.Service.SuspensionStart = null;
                     customer.Service.SuspensionEnd = null;
                 }
-                if (customer.Service.SuspensionStart < DateTime.Now.Date && DateTime.Now.Date < customer.Service.SuspensionEnd)
+                if (customer.Service.SuspensionStart <= DateTime.Now.Date && DateTime.Now.Date <= customer.Service.SuspensionEnd)
                 {
                     customer.Service.isActive = false;
                 }

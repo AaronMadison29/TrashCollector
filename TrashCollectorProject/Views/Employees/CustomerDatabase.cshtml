@@ -30,20 +30,21 @@
     </div>
 </div>
 
-@if (Model.Customers.Count != 0 && Model.QueryDay != null)
-{
-    <table class="table">
-        <thead>
-            <tr class="table-primary">
-                <th>Customer Name </th>
-                <th>Street Address</th>
-                <th>City</th>
-                <th>State</th>
-                <th>Zip</th>
-                <th>Account Active</th>
-                <th>Options</th>
-            </tr>
-        </thead>
+
+<table class="table">
+    <thead>
+        <tr class="table-primary">
+            <th>Customer Name </th>
+            <th>Street Address</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Zip</th>
+            <th>Account Active</th>
+            <th>Options</th>
+        </tr>
+    </thead>
+    @if (Model.Customers.Count != 0 && Model.QueryDay != null)
+    {
         <tbody>
             @foreach (var customer in Model.Customers)
             {
@@ -72,12 +73,12 @@
                 </tr>
             }
         </tbody>
-    </table>
-}
-else if (Model.Customers.Count == 0)
-{
-    <strong>There are no customers that day.</strong>
-}
+    }
+    else if (Model.Customers.Count == 0)
+    {
+        <tr><td>There are no customers that day.</td></tr>
+    }
+</table>
 
 <div>
     <a asp-action="Index">Back to Dashboard</a>

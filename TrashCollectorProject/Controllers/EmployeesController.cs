@@ -7,6 +7,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TrashCollectorProject.Contracts;
 using TrashCollectorProject.Models;
+using Stripe.Checkout;
+using Stripe.Infrastructure;
+using Stripe.Issuing;
+using Stripe.Reporting;
+using Stripe.Terminal;
+using Stripe.Issuing;
 
 namespace TrashCollectorProject.Controllers
 {
@@ -122,11 +128,14 @@ namespace TrashCollectorProject.Controllers
             try
             {
                 var customer = _repo.Customer.GetCustomerIncludeAll(id);
-                customer.Service.PickedUp = confirmed;
                 customer.Service.Balance += 20;
                 if(customer.Service.OneTimePickup.HasValue && customer.Service.OneTimePickup.Value.Date == DateTime.Now.Date)
                 {
                     customer.Service.OneTimePickup = null;
+                }
+                else
+                {
+                    customer.Service.PickedUp = confirmed;
                 }
                 _repo.Customer.Update(customer);
                 _repo.Save();
@@ -151,5 +160,6 @@ namespace TrashCollectorProject.Controllers
             var y = x.Where(x => x.Service.PickupDay == DateTime.Now.DayOfWeek || x.Service.OneTimePickup.GetValueOrDefault().Date == DateTime.Now.Date).ToList();
             return y;
         }
+
     }
 }

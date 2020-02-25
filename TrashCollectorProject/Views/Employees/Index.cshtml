@@ -26,55 +26,76 @@
             <th>City</th>
             <th>State</th>
             <th>Zip</th>
-            <th>Account Active</th>
-            <th>Pickup Status</th>
+            <th>One Time Pickup?</th>
+            <th>Weekly Pickup Status</th>
             <th>Options</th>
         </tr>
     </thead>
-    <tbody>
-        @foreach (var customer in Model.Customers)
-        {
-            <tr class="table-light">
-                <td>
-                    @customer.Name
-                </td>
-                <td>
-                    @customer.Address.StreetAddress
-                </td>
-                <td>
-                    @customer.Address.City
-                </td>
-                <td>
-                    @customer.Address.State
-                </td>
-                <td>
-                    @customer.Address.Zip
-                </td>
-                <td>
-                    @customer.Service.isActive
-                </td>
-                <td>
-                    @if (@customer.Service.PickedUp)
-                    {
-                        @: Picked Up
-                    }
-                    else
-                    {
-                        @:Awaiting Pickup
-                    }
-                </td>
-                <td>
-                    @if (!@customer.Service.PickedUp)
-                    {
-                        @Html.ActionLink("Confirm Pickup", "ConfirmPickup", new { id = customer.IdentityUser.Id }) @:|
-                    }
 
-                    @Html.ActionLink("Customer Details", "CustomerDetails", new { id = customer.IdentityUser.Id })
-                </td>
-            </tr>
-        }
-    </tbody>
+    @if (Model.Customers.Count > 0)
+    {
+        <tbody>
+            @foreach (var customer in Model.Customers)
+            {
+                <tr class="table-light">
+                    <td>
+                        @customer.Name
+                    </td>
+                    <td>
+                        @customer.Address.StreetAddress
+                    </td>
+                    <td>
+                        @customer.Address.City
+                    </td>
+                    <td>
+                        @customer.Address.State
+                    </td>
+                    <td>
+                        @customer.Address.Zip
+                    </td>
+                    <td>
+                        @if (customer.Service.OneTimePickup.HasValue && customer.Service.OneTimePickup.Value.Date == DateTime.Now.Date)
+                        {
+                            @:True
+                        }
+                        else
+                        {
+                            @:False
+                        }
+                    </td>
+                    <td>
+                        @if (@customer.Service.PickedUp)
+                        {
+                            @: Picked Up
+                        }
+                        else
+                        {
+                            @:Awaiting Pickup
+                        }
+                    </td>
+                    <td>
+                        @if (!@customer.Service.PickedUp || customer.Service.OneTimePickup.HasValue && customer.Service.OneTimePickup.Value.Date == DateTime.Now.Date)
+                        {
+                            @Html.ActionLink("Confirm Pickup", "ConfirmPickup", new { id = customer.IdentityUser.Id }) @:|
+                        }
+
+                        @Html.ActionLink("Customer Details", "CustomerDetails", new { id = customer.IdentityUser.Id })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    }
+    else
+    {
+        <tr>
+            <td>
+                There are no customers today.
+            </td>
+        </tr>
+    }
 </table>
+
+
 <head>
     <style>
         /* Set the size of the div element that contains the map */
@@ -84,7 +105,6 @@
         }
     </style>
 </head>
-<h3>Map View</h3>
 <script>
 var geocoder;
   var map;
@@ -98,7 +118,7 @@ var geocoder;
   }
 
     function codeAddress() {
-      
+
     var addresses = [];
         @foreach(var customer in Model.Customers)
         {
@@ -119,9 +139,13 @@ var geocoder;
           });
       }
     }</script>
-<body onload="initialize()">
-    <div id="map" style="width: 700px; height: 480px;"></div>
-</body>
+@if (Model.Customers.Count > 0)
+{
+    <h3>Map View</h3>
+    <body onload="initialize()">
+        <div id="map" style="width: 700px; height: 480px;"></div>
+    </body>
+}
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?key= + @KeyVariables.Key">
 </script>
